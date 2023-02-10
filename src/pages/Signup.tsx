@@ -6,7 +6,6 @@ export default function Signup() {
     const password = useInput()
 
     const signUp = async () => {
-        console.log(email.value, password.value)
         await wantedApi.post('/auth/signup',
         {
             email: email.value,

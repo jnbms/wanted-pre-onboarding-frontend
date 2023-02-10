@@ -13,7 +13,10 @@ export default function Signin() {
             password: password.value
         },
         { headers: { "Content-Type": 'application/json' } })
-        .then((res: any) => console.log(res.data.access_token))
+        .then((res) => {
+            localStorage.setItem('JWT',res.data.access_token)
+            
+        })
         .catch((error) => {
             if(error.response) {
                 if(error.response.data.message === "동일한 이메일이 이미 존재합니다.") {
