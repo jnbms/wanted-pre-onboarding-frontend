@@ -1,35 +1,46 @@
 import {wantedApi} from "api";
 import { useInput } from "hooks";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
     const email = useInput()
     const password = useInput()
+    const [loginDisabled, setloginDisabled] = useState(false)
+    const navigate = useNavigate()
 
-    const signUp = async () => {
-        await wantedApi.post('/auth/signup',
+    useEffect(() => {
+        if(window.localStorage.JWT !== undefined)
+            navigate('/todo')
+    })
+
+    useEffect(() => 
+        email.value.includes('@') && password.value.length >= 8
+        ? setloginDisabled(false)
+        : setloginDisabled(true)
+    ,[email, password])
+
+    const signUp = () => {
+        wantedApi.post('/auth/signup',
         {
             email: email.value,
             password: password.value
         },
         { headers: { "Content-Type": 'application/json' } })
-        .then((res: any) => console.log(res.message))
-        .catch((error) => {
-            if(error.response) {
-                if(error.response.data.message === "동일한 이메일이 이미 존재합니다.") {
-                    window.alert("동일한 이메일이 이미 존재합니다.")
-                } else {
-                    window.alert(error.response.data.message)
-                }
-            }
+        .then(() => {
+            window.alert('회원가입이 완료되었습니다.')
+            navigate('/signin')
+        })
+        .catch(() => {
+            window.alert('회원가입에 실패했습니다.')
         })
     }
     return(
         <div style={{display: 'grid', justifyContent: 'center'}}>
-            <div>회원 가입</div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems:' center'}}>
                 <input {...email} data-testid="email-input" />
                 <input {...password} data-testid="password-input" />
-                <button data-testid="signin-button" onClick={signUp}>회원가입</button>
+                <button disabled={loginDisabled} data-testid="signup-button" onClick={signUp}>회원가입</button>
             </div>
         </div>
     );

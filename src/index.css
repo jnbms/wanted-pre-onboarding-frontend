@@ -46,3 +46,7 @@ table {
 li {
 	list-style: none;
 }
+
+* {
+	font-size: 12px;
+}

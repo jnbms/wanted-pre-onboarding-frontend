@@ -4,9 +4,9 @@ import reportWebVitals from './reportWebVitals';
 // import { createBrowserRouter } from 'react-router-dom'
 import "index.css"
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Signin, Signup, Todo } from './pages';
-import axios from 'axios';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Signin, Signup, Todo } from './pages'
+import axios from 'axios'
 
 const router = createBrowserRouter([
   {
@@ -28,7 +28,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+      <RouterProvider router={router}/>
   </React.StrictMode>
 );
 axios.defaults.withCredentials = true;
