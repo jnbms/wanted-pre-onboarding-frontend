@@ -1,38 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useInput } from "hooks";
-import { wantedApi } from "api";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import { useInput } from "hooks"
+import { wantedApi } from "api"
+import { useNavigate } from "react-router-dom"
+import useValidate from "hooks/useValidate"
 
 export default function Signin() {
     const email = useInput()
     const password = useInput()
-    const [loginDisabled, setloginDisabled] = useState(false)
+    // Assignment 1 : 이메일의 @ 포함 여부, 패스워트 8자리 이상 유효성 체크
+    const enable = useValidate(email.value.includes('@') && password.value.length >= 8)
 
+    // Assignment 4 : 로그인 여부에 따른 리다이렉트
     const navigate = useNavigate()
-    
-    // 로컬 스토리지에 JWT가 저장되어 있는 경우 todo 페이지로 이동
     useEffect(() => {
         if(window.localStorage.JWT !== undefined)
             navigate('/todo')
     })
-
-    // 유효성 검사
-    useEffect(() => 
-        email.value.includes('@') && password.value.length >= 8
-        ? setloginDisabled(false)
-        : setloginDisabled(true)
-    ,[email, password])
 
     const signIn = () => {
         wantedApi.post('/auth/signin',
         {
             email: email.value,
             password: password.value
-        },
-        { headers: { "Content-Type": 'application/json' } })
+        })
         .then((res: any) => {
-            localStorage.setItem('JWT',res.data.access_token)
+            //Assignment 3 : 로그인 완료시 TODO 페이지로 이동
             window.alert('로그인이 완료되엇습니다.')
+            localStorage.setItem('JWT',res.data.access_token)
             navigate('/todo')
         })
         .catch(() => {
@@ -41,12 +35,10 @@ export default function Signin() {
     }
 
     return(
-        <div style={{height: '100vh', width: '100vw', display: 'grid', alignContent: 'center'}}>
-            <div style={{display: 'flex', width: 300, height: 150, flexDirection: 'column', alignItems:' center', border: '1px solid'}}>
-                <input {...email} data-testid="email-input" />
-                <input {...password} data-testid="password-input" />
-                <button disabled={loginDisabled} onClick={signIn} data-testid="signin-button">로그인</button>
+            <div>
+                <input data-testid="email-input" {...email}/>
+                <input data-testid="password-input" {...password}/>
+                <button data-testid="signin-button" disabled={!enable} onClick={signIn}>로그인</button>
             </div>
-        </div>
-    );
+    )
 }

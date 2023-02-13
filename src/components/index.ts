@@ -1,3 +1,2 @@
-import TodoItem from "./TodoItem";
-
+import TodoItem from "./TodoItem"
 export {TodoItem}

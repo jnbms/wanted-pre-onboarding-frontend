@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from "react"
-import { wantedApi } from "api"
+import { Fragment } from "react"
+import { wantedApi } from "api";
 import { TodoItem } from "components"
-import { useInput } from "hooks"
-import { createTodo, readTodos } from "api/crud"
+import { useInput, useTodos } from "hooks"
+import { createTodo } from "api/crud"
 
 
 export default function Todo() {
@@ -10,14 +10,13 @@ export default function Todo() {
     wantedApi.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
     
     const newTodo = useInput()
-    const [todos, setTodos] = useState([])
-    useEffect(() => { readTodos().then(data => setTodos(data)) })
+    const [todos, changeTodos] = useTodos()
     
     return(
         <Fragment>
             <input data-testid="new-todo-input" {...newTodo}/>
-            <button data-testid="new-todo-add-button" onClick={() => {createTodo(newTodo.value)}}>추가</button>
+            <button data-testid="new-todo-add-button" onClick={() => changeTodos(createTodo(newTodo.value))}>추가</button>
             {todos.map((todo: any) => <TodoItem key={todo.id} todo={todo}/>)}
         </Fragment>
-    )
+    );
 }

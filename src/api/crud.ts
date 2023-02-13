@@ -14,4 +14,4 @@ async function deleteTodo(id: number) {
     await wantedApi.delete(`/todos/${id}`)
 }
 
-export {createTodo,readTodos,updateTodo,deleteTodo}
+export {createTodo, readTodos, updateTodo, deleteTodo}
